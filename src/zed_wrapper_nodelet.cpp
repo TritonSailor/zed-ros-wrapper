@@ -110,7 +110,7 @@ namespace zed_wrapper {
         ros::Publisher pub_right_cam_info_raw;
         ros::Publisher pub_depth_cam_info;
         ros::Publisher pub_odom;
-        ros::Publisher pub_vison_position_estimate;
+        ros::Publisher pub_vision_position_estimate;
 
         // tf
         tf2_ros::TransformBroadcaster transform_odom_broadcaster;
@@ -120,7 +120,7 @@ namespace zed_wrapper {
         std::string depth_frame_id;
         std::string cloud_frame_id;
         std::string odometry_frame_id;
-        std::string vision_frame_id
+        std::string vision_frame_id;
         std::string base_frame_id;
         std::string camera_frame_id;
         // initialization Transform listener
@@ -909,7 +909,7 @@ namespace zed_wrapper {
             cloud_frame_id = camera_frame_id;
 
             string odometry_topic = "odom";
-            string vision_topic = "vision_position_estimate"
+            string vision_topic = "vision_position_estimate";
 
             nh_ns.getParam("rgb_topic", rgb_topic);
             nh_ns.getParam("rgb_raw_topic", rgb_raw_topic);
@@ -1041,7 +1041,7 @@ namespace zed_wrapper {
             NODELET_INFO_STREAM("Advertized on topic " << odometry_topic);
 
             //Vision Position Estimate publisher
-            pub_vison_position_estimate = nh.advertise<geometry_msgs::PoseWithCovarianceStamped>(vision_topic, 1);
+            pub_vision_position_estimate = nh.advertise<geometry_msgs::PoseWithCovarianceStamped>(vision_topic, 1);
             NODELET_INFO_STREAM("Advertized on topic " << vision_topic);
 
             device_poll_thread = boost::shared_ptr<boost::thread> (new boost::thread(boost::bind(&ZEDWrapperNodelet::device_poll, this)));
