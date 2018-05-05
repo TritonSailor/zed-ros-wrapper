@@ -51,7 +51,7 @@
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2_ros/transform_broadcaster.h>
 #include <geometry_msgs/TransformStamped.h>
-#include <geometry_msgs/PoseWithCovarianceStamped.h>
+#include <geometry_msgs/PoseStamped.h>
 
 #include "XmlRpcException.h"
 
@@ -330,20 +330,20 @@ namespace zed_wrapper {
          * \param t : the ros::Time to stamp the image
          */
         void publishVisionPositionEstimate(tf2::Transform base_transform, ros::Publisher &pub_vision_position_estimate, string vision_frame_id, ros::Time t) {
-            geometry_msgs::PoseWithCovarianceStamped pose;
+            geometry_msgs::PoseStamped pose;
             pose.header.stamp = t;
             pose.header.frame_id = vision_frame_id; // vision_frame
             //pose.child_frame_id = base_frame_id; // base_frame
             // conversion from Tranform to message
             geometry_msgs::Transform base2 = tf2::toMsg(base_transform);
             // Add all value in visual position message
-            pose.pose.pose.position.x = base2.translation.x;
-            pose.pose.pose.position.y = base2.translation.y;
-            pose.pose.pose.position.z = base2.translation.z;
-            pose.pose.pose.orientation.x = base2.rotation.x;
-            pose.pose.pose.orientation.y = base2.rotation.y;
-            pose.pose.pose.orientation.z = base2.rotation.z;
-            pose.pose.pose.orientation.w = base2.rotation.w;
+            pose.pose.position.x = base2.translation.x;
+            pose.pose.position.y = base2.translation.y;
+            pose.pose.position.z = base2.translation.z;
+            pose.pose.orientation.x = base2.rotation.x;
+            pose.pose.orientation.y = base2.rotation.y;
+            pose.pose.orientation.z = base2.rotation.z;
+            pose.pose.orientation.w = base2.rotation.w;
             // Publish visual position message
             pub_vision_position_estimate.publish(pose);
         }
@@ -1082,7 +1082,7 @@ namespace zed_wrapper {
             NODELET_INFO_STREAM("Advertized on topic " << odometry_topic);
 
             //Vision Position Estimate publisher
-            pub_vision_position_estimate = nh.advertise<geometry_msgs::PoseWithCovarianceStamped>(vision_topic, 1);
+            pub_vision_position_estimate = nh.advertise<geometry_msgs::PoseStamped>(vision_topic, 1);
             NODELET_INFO_STREAM("Advertized on topic " << vision_topic);
 
             device_poll_thread = boost::shared_ptr<boost::thread> (new boost::thread(boost::bind(&ZEDWrapperNodelet::device_poll, this)));
